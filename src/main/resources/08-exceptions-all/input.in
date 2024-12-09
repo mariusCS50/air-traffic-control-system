@@ -9,14 +9,13 @@
 09:06:00 - permission_for_maneuver - Delta
 09:07:00 - flight_info - FR3773
 09:10:00 - permission_for_maneuver - Delta
-09:20:00 - runway_info - Delta
 09:17:00 - permission_for_maneuver - Delta
 09:20:00 - runway_info - Delta
 09:25:00 - permission_for_maneuver - Delta
 09:26:00 - flight_info - OS786
 09:32:00 - runway_info - Delta
 09:52:00 - permission_for_maneuver - Delta
-10:59:00 - permission_for_maneuver - Delta
+09:59:00 - permission_for_maneuver - Delta
 10:11:00 - flight_info - FR6285
 10:12:00 - flight_info - A3963
 10:59:00 - allocate_plane - wide body - Airbus A380 - FZ1709 - Bucharest - Dubai - 10:30:00 - Alpha
