@@ -78,11 +78,11 @@ public class TestMain {
         emptyOutput(file);
         Main.main(new String[]{file});
         String[] test_file_names = {
-                "runway_info_Alpha_03:30:00",
-                "runway_info_Bravo_11:00:00",
-                "runway_info_Charlie_11:10:00",
-                "runway_info_Delta_03:22:00",
-                "runway_info_Delta_10:45:00"
+                "runway_info_Alpha_03-30-00",
+                "runway_info_Bravo_11-00-00",
+                "runway_info_Charlie_11-10-00",
+                "runway_info_Delta_03-22-00",
+                "runway_info_Delta_10-45-00"
         };
         for (String test_file_name : test_file_names) {
             Path out = Paths.get(antetResources + file + "/" + test_file_name + ".out");
@@ -97,11 +97,11 @@ public class TestMain {
         emptyOutput(file);
         Main.main(new String[]{file});
         String[] test_file_names = {
-                "runway_info_Alpha_03:30:00",
-                "runway_info_Bravo_11:00:00",
-                "runway_info_Charlie_11:10:00",
-                "runway_info_Delta_03:22:00",
-                "runway_info_Delta_10:45:00"
+                "runway_info_Alpha_03-30-00",
+                "runway_info_Bravo_11-00-00",
+                "runway_info_Charlie_11-10-00",
+                "runway_info_Delta_03-22-00",
+                "runway_info_Delta_10-45-00"
         };
         for (String test_file_name : test_file_names) {
             Path out = Paths.get(antetResources + file + "/" + test_file_name + ".out");
@@ -118,12 +118,12 @@ public class TestMain {
 
         String[] test_file_names = {
                 "flight_info",
-                "runway_info_Alpha_11:17:00",
-                "runway_info_Alpha_11:30:00",
-                "runway_info_Alpha_11:43:00",
-                "runway_info_Alpha_11:55:00",
-                "runway_info_Delta_09:28:00",
-                "runway_info_Delta_09:51:00"
+                "runway_info_Alpha_11-17-00",
+                "runway_info_Alpha_11-30-00",
+                "runway_info_Alpha_11-43-00",
+                "runway_info_Alpha_11-55-00",
+                "runway_info_Delta_09-28-00",
+                "runway_info_Delta_09-51-00"
         };
         for (String test_file_name : test_file_names) {
             Path out = Paths.get(antetResources + file + "/" + test_file_name + ".out");
@@ -140,12 +140,12 @@ public class TestMain {
 
         String[] test_file_names = {
                 "flight_info",
-                "runway_info_Alpha_11:13:00",
-                "runway_info_Alpha_11:20:00",
-                "runway_info_Alpha_11:36:00",
-                "runway_info_Alpha_11:55:00",
-                "runway_info_Delta_09:20:00",
-                "runway_info_Delta_09:32:00"
+                "runway_info_Alpha_11-13-00",
+                "runway_info_Alpha_11-20-00",
+                "runway_info_Alpha_11-36-00",
+                "runway_info_Alpha_11-55-00",
+                "runway_info_Delta_09-20-00",
+                "runway_info_Delta_09-32-00"
         };
         for (String test_file_name : test_file_names) {
             Path out = Paths.get(antetResources + file + "/" + test_file_name + ".out");
@@ -163,13 +163,13 @@ public class TestMain {
         String[] test_file_names = {
                 "board_exceptions",
                 "flight_info",
-                "runway_info_Alpha_11:13:00",
-                "runway_info_Alpha_11:15:00",
-                "runway_info_Alpha_11:20:00",
-                "runway_info_Alpha_11:36:00",
-                "runway_info_Alpha_11:55:00",
-                "runway_info_Delta_09:20:00",
-                "runway_info_Delta_09:32:00"
+                "runway_info_Alpha_11-13-00",
+                "runway_info_Alpha_11-15-00",
+                "runway_info_Alpha_11-20-00",
+                "runway_info_Alpha_11-36-00",
+                "runway_info_Alpha_11-55-00",
+                "runway_info_Delta_09-20-00",
+                "runway_info_Delta_09-32-00"
         };
         for (String test_file_name : test_file_names) {
             Path out = Paths.get(antetResources + file + "/" + test_file_name + ".out");
@@ -187,13 +187,13 @@ public class TestMain {
         String[] test_file_names = {
                 "board_exceptions",
                 "flight_info",
-                "runway_info_Alpha_11:13:00",
-                "runway_info_Alpha_11:15:00",
-                "runway_info_Alpha_11:20:00",
-                "runway_info_Alpha_11:36:00",
-                "runway_info_Alpha_11:55:00",
-                "runway_info_Delta_09:20:00",
-                "runway_info_Delta_09:32:00"
+                "runway_info_Alpha_11-13-00",
+                "runway_info_Alpha_11-15-00",
+                "runway_info_Alpha_11-20-00",
+                "runway_info_Alpha_11-36-00",
+                "runway_info_Alpha_11-55-00",
+                "runway_info_Delta_09-20-00",
+                "runway_info_Delta_09-32-00"
         };
         for (String test_file_name : test_file_names) {
             Path out = Paths.get(antetResources + file + "/" + test_file_name + ".out");
@@ -211,18 +211,18 @@ public class TestMain {
         String[] test_file_names = {
                 "board_exceptions",
                 "flight_info",
-                "runway_info_Alpha_01:06:00",
-                "runway_info_Alpha_01:23:00",
-                "runway_info_Alpha_01:39:00",
-                "runway_info_Alpha_01:43:00",
-                "runway_info_Bravo_04:05:00",
-                "runway_info_Bravo_04:10:00",
-                "runway_info_Bravo_04:48:00",
-                "runway_info_Charlie_08:03:00",
-                "runway_info_Charlie_08:10:00",
-                "runway_info_Delta_10:03:00",
-                "runway_info_Delta_10:07:00",
-                "runway_info_Delta_10:11:00"
+                "runway_info_Alpha_01-06-00",
+                "runway_info_Alpha_01-23-00",
+                "runway_info_Alpha_01-39-00",
+                "runway_info_Alpha_01-43-00",
+                "runway_info_Bravo_04-05-00",
+                "runway_info_Bravo_04-10-00",
+                "runway_info_Bravo_04-48-00",
+                "runway_info_Charlie_08-03-00",
+                "runway_info_Charlie_08-10-00",
+                "runway_info_Delta_10-03-00",
+                "runway_info_Delta_10-07-00",
+                "runway_info_Delta_10-11-00"
         };
         for (String test_file_name : test_file_names) {
             Path out = Paths.get(antetResources + file + "/" + test_file_name + ".out");
