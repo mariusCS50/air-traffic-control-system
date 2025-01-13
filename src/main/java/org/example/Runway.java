@@ -1,29 +1,39 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 
 public class Runway<T extends Airplane> {
     private String id;
     private RunwayType type;
-    private ArrayList<T> airplanes;
+    private HashMap<String, T> airplanes;
 
     private Runway(RunwayBuilder builder) {
         this.id = builder.id;
         this.type = builder.type;
-        this.airplanes = new ArrayList<>();
+        this.airplanes = new HashMap<>();
     }
 
     public void addAirplane(T airplane) {
-        airplanes.add(airplane);
-        Collections.sort(airplanes);
+        airplanes.put(airplane.getFlightId(), airplane);
+    }
+
+    public HashMap<String,T> getAirplanes() {
+        return airplanes;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public RunwayType getRunwayType() {
+        return type;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(id).append("\n");
-        for (T airplane : airplanes) {
+        for (T airplane : airplanes.values()) {
             sb.append(airplane.toString()).append("\n");
         }
         return sb.toString();

@@ -1,6 +1,7 @@
 package org.example;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Airplane implements Comparable<Airplane> {
     private String model;
@@ -12,14 +13,15 @@ public class Airplane implements Comparable<Airplane> {
     private AirplaneStatus status;
     private int urgency;
 
-    public Airplane(String model, String flightId, String departureLocation, String destination, LocalTime desiredTime, AirplaneStatus status, int urgency) {
-        this.model = model;
-        this.flightId = flightId;
-        this.departure = departureLocation;
-        this.destination = destination;
-        this.desiredTime = desiredTime;
-        this.status = status;
-        this.urgency = urgency;
+    public Airplane(String[] params) {
+        this.model = params[3];
+        this.flightId = params[4];
+        this.departure = params[5];
+        this.destination = params[6];
+        this.desiredTime = LocalTime.parse(params[7]);
+        this.actualTime = null;
+        this.status = (params[6].equals("Bucharest") ? AirplaneStatus.WAITING_FOR_LANDING : AirplaneStatus.WAITING_FOR_TAKEOFF);
+        this.urgency = (params[8] == null ? 0 : 1);
     }
 
     public String getModel() {
@@ -60,7 +62,8 @@ public class Airplane implements Comparable<Airplane> {
 
     @Override
     public String toString() {
-        return model + " - " + flightId + " - " + departure + " - " + destination + " - " + status + " - " + desiredTime + (actualTime != null ? " - " + actualTime : "") + " - " + urgency;
+        return model + " - " + flightId + " - " + departure + " - " + destination + " - " +
+                status + " - " + desiredTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")) + (actualTime != null ? " - " + actualTime : "");
     }
 
     @Override
