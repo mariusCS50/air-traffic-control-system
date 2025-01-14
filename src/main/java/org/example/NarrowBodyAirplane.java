@@ -11,9 +11,4 @@ public class NarrowBodyAirplane extends Airplane {
     public String toString() {
         return "Narrow Body - " + super.toString();
     }
-
-    @Override
-    public int compareTo(Airplane o) {
-        return 0;
-    }
 }

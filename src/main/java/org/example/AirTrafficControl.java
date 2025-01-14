@@ -10,7 +10,7 @@ public class AirTrafficControl {
     private HashMap<String, Runway<?>> runways;
     private HashMap<String, String> aiplaneRunways;
 
-    public AirTrafficControl(String[] args) throws IOException {
+    public AirTrafficControl() {
         runways = new HashMap<>();
         aiplaneRunways = new HashMap<>();
     }
@@ -20,26 +20,29 @@ public class AirTrafficControl {
         PrintWriter out = new PrintWriter(new FileWriter("src/main/resources/" + args[0] + "/flight_info.out"), true);
         PrintWriter err = new PrintWriter(new FileWriter("src/main/resources/" + args[0] + "/board_exceptions.out"), true);
 
-        while (in.hasNextLine()) {
+        boolean running = true;
+        while (running) {
             String line = in.nextLine();
             String[] command = line.split(" - ");
+
+            updateRunwaysStatus(LocalTime.parse(command[0]));
+
             try {
                 switch (command[1]) {
-                    case "add_runway_in_use": runways.put(command[2], new Runway.RunwayBuilder(command[2])
-                                                                                .setType(command[3])
-                                                                                .build(command[4]));
+                    case "add_runway_in_use": add_runway(command);
                         break;
                     case "allocate_plane": allocate_plane_on_runway(command);
                         break;
-                    case "permission_for_maneuver":
+                    case "permission_for_maneuver": check_permission_and_execute_maneuver(command);
                         break;
                     case "runway_info": print_runway_info(args, command);
                         break;
                     case "flight_info": print_flight_info(out, command);
                         break;
-                    case "exit" : break;
+                    case "exit" : running = false;
+                        break;
                 }
-            } catch (IncorrectRunwayException e) {
+            } catch (IncorrectRunwayException | UnavailableRunwayException e) {
                 err.println(e.getMessage());
             }
         }
@@ -48,8 +51,19 @@ public class AirTrafficControl {
     }
 
     public static void main(String[] args) throws IOException {
-        AirTrafficControl atc = new AirTrafficControl(args);
+        AirTrafficControl atc = new AirTrafficControl();
         atc.run(args);
+    }
+
+    public void add_runway(String[] command) {
+        if (command[4].equals("wide body")) {
+            Runway<WideBodyAirplane> runway = new Runway<>(command);
+            runways.put(runway.getId(), runway);
+        }
+        if (command[4].equals("narrow body")) {
+            Runway<NarrowBodyAirplane> runway = new Runway<>(command);
+            runways.put(runway.getId(), runway);
+        }
     }
 
     public void allocate_plane_on_runway(String[] command) throws IncorrectRunwayException {
@@ -74,21 +88,52 @@ public class AirTrafficControl {
         }
     }
 
-    public void print_flight_info(PrintWriter out, String[] command) throws IOException {
+    public void print_flight_info(PrintWriter out, String[] command) {
         String runwayId = aiplaneRunways.get(command[2]);
         Runway<? extends Airplane> runway = runways.get(runwayId);
 
-        out.println(command[0] + " | " + runway.getAirplanes().get(command[2]).toString());
+        out.println(command[0] + " | " + runway.getAirplanesData().get(command[2]).toString());
     }
 
     public void print_runway_info(String[] args, String[] command) throws IOException {
-//        Runway<? extends Airplane> runway = runways.get(command[2]);
-//
-//        LocalTime timestamp = LocalTime.parse(command[0], DateTimeFormatter.ofPattern("HH-mm-ss"));
-//        PrintWriter writer = new PrintWriter(new FileWriter("src/main/resources/" + args[0] +
-//                "/runway_info_" + runway.getId() + "_" + timestamp + ".out", true));
-//
-//        writer.print(runway.toString());
-//        writer.close();
+        Runway<? extends Airplane> runway = runways.get(command[2]);
+
+        LocalTime timestamp = LocalTime.parse(command[0]);
+        PrintWriter writer = new PrintWriter(new FileWriter("src/main/resources/" + args[0] + "/runway_info_" +
+                runway.getId() + "_" + timestamp.format(DateTimeFormatter.ofPattern("HH-mm-ss")) + ".out", true));
+
+        writer.print(runway);
+        writer.close();
+    }
+
+    public void check_permission_and_execute_maneuver(String[] command) throws UnavailableRunwayException {
+        Runway<? extends Airplane> runway = runways.get(command[2]);
+        LocalTime timestamp = LocalTime.parse(command[0]);
+
+        if (runway.getStatus().equals(RunwayStatus.OCCUPIED)) {
+            throw new UnavailableRunwayException(command[0]);
+        }
+
+        Airplane airplane = runway.retrieveFirstPriorityAirplane();
+
+        if (airplane.getStatus().equals(AirplaneStatus.WAITING_FOR_TAKEOFF)) {
+            airplane.setStatus(AirplaneStatus.DEPARTED);
+            runway.setOccupiedUntil(timestamp.plusMinutes(5));
+        }
+        if (airplane.getStatus().equals(AirplaneStatus.WAITING_FOR_LANDING)) {
+            airplane.setStatus(AirplaneStatus.LANDED);
+            runway.setOccupiedUntil(timestamp.plusMinutes(10));
+        }
+
+        airplane.setActualTime(timestamp);
+        runway.setStatus(RunwayStatus.OCCUPIED);
+    }
+
+    public void updateRunwaysStatus(LocalTime timestamp) {
+        for (Runway<?> runway : runways.values()) {
+            if (runway.getStatus().equals(RunwayStatus.OCCUPIED) && runway.getOccupiedUntil().isBefore(timestamp)) {
+                runway.setStatus(RunwayStatus.FREE);
+            }
+        }
     }
 }

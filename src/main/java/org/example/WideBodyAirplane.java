@@ -11,9 +11,4 @@ public class WideBodyAirplane extends Airplane {
     public String toString() {
         return "Wide Body - " + super.toString();
     }
-
-    @Override
-    public int compareTo(Airplane o) {
-        return 0;
-    }
 }
