@@ -1,6 +1,6 @@
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.example.AirTrafficControl;
+import org.example.Main;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class TestAirTrafficControl {
+public class TestMain {
     String antetResources = "src/main/resources/";
 
     public boolean areFilesEqual(Path file1, Path file2) throws IOException {
@@ -45,7 +45,7 @@ public class TestAirTrafficControl {
     public void basicFlightSearch01() throws IOException {
         String file = "01-basic-flight-search";
         emptyOutput(file);
-        AirTrafficControl.main(new String[]{file});
+        Main.main(new String[]{file});
         String[] test_file_names = {
                 "flight_info"
         };
@@ -60,7 +60,7 @@ public class TestAirTrafficControl {
     public void exceptionsFlightSearch02() throws IOException {
         String file = "02-exceptions-flight-search";
         emptyOutput(file);
-        AirTrafficControl.main(new String[]{file});
+        Main.main(new String[]{file});
         String[] test_file_names = {
                 "board_exceptions",
                 "flight_info"
@@ -76,7 +76,7 @@ public class TestAirTrafficControl {
     public void basicRunwayInfo03() throws IOException {
         String file = "03-basic-runway-info";
         emptyOutput(file);
-        AirTrafficControl.main(new String[]{file});
+        Main.main(new String[]{file});
         String[] test_file_names = {
                 "runway_info_Alpha_03-30-00",
                 "runway_info_Bravo_11-00-00",
@@ -95,7 +95,7 @@ public class TestAirTrafficControl {
     public void urgentRunwayInfo04() throws IOException {
         String file = "04-urgent-runway-info";
         emptyOutput(file);
-        AirTrafficControl.main(new String[]{file});
+        Main.main(new String[]{file});
         String[] test_file_names = {
                 "runway_info_Alpha_03-30-00",
                 "runway_info_Bravo_11-00-00",
@@ -114,7 +114,7 @@ public class TestAirTrafficControl {
     public void maneuverPrintFree05() throws IOException {
         String file = "05-maneuver-print-free";
         emptyOutput(file);
-        AirTrafficControl.main(new String[]{file});
+        Main.main(new String[]{file});
 
         String[] test_file_names = {
                 "flight_info",
@@ -136,7 +136,7 @@ public class TestAirTrafficControl {
     public void maneuverPrintOccupied06() throws IOException {
         String file = "06-maneuver-print-occupied";
         emptyOutput(file);
-        AirTrafficControl.main(new String[]{file});
+        Main.main(new String[]{file});
 
         String[] test_file_names = {
                 "flight_info",
@@ -158,7 +158,7 @@ public class TestAirTrafficControl {
     public void exceptionsManeuver07() throws IOException {
         String file = "07-exceptions-maneuver";
         emptyOutput(file);
-        AirTrafficControl.main(new String[]{file});
+        Main.main(new String[]{file});
 
         String[] test_file_names = {
                 "board_exceptions",
@@ -182,7 +182,7 @@ public class TestAirTrafficControl {
     public void exceptionsAll08() throws IOException {
         String file = "08-exceptions-all";
         emptyOutput(file);
-        AirTrafficControl.main(new String[]{file});
+        Main.main(new String[]{file});
 
         String[] test_file_names = {
                 "board_exceptions",
@@ -206,7 +206,7 @@ public class TestAirTrafficControl {
     public void allCases09() throws IOException {
         String file = "09-all-cases";
         emptyOutput(file);
-        AirTrafficControl.main(new String[]{file});
+        Main.main(new String[]{file});
 
         String[] test_file_names = {
                 "board_exceptions",

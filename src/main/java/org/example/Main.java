@@ -6,16 +6,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class AirTrafficControl {
-    private HashMap<String, Runway<?>> runways;
-    private HashMap<String, String> aiplaneRunways;
+public class Main {
+    private static HashMap<String, Runway<?>> runways = new HashMap<>();;
+    private static HashMap<String, String> aiplaneRunways = new HashMap<>();;
 
-    public AirTrafficControl() {
-        runways = new HashMap<>();
-        aiplaneRunways = new HashMap<>();
-    }
-
-    public void run(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         Scanner in = new Scanner(new FileReader("src/main/resources/" + args[0] + "/input.in"));
         PrintWriter out = new PrintWriter(new FileWriter("src/main/resources/" + args[0] + "/flight_info.out"), true);
         PrintWriter err = new PrintWriter(new FileWriter("src/main/resources/" + args[0] + "/board_exceptions.out"), true);
@@ -50,12 +45,7 @@ public class AirTrafficControl {
         out.close();
     }
 
-    public static void main(String[] args) throws IOException {
-        AirTrafficControl atc = new AirTrafficControl();
-        atc.run(args);
-    }
-
-    public void add_runway(String[] command) {
+    public static void add_runway(String[] command) {
         if (command[4].equals("wide body")) {
             Runway<WideBodyAirplane> runway = new Runway<>(command);
             runways.put(runway.getId(), runway);
@@ -66,7 +56,7 @@ public class AirTrafficControl {
         }
     }
 
-    public void allocate_plane_on_runway(String[] command) throws IncorrectRunwayException {
+    public static void allocate_plane_on_runway(String[] command) throws IncorrectRunwayException {
         Runway<? extends Airplane> runway = runways.get(command[8]);
         RunwayType runwayType = runway.getRunwayType();
 
@@ -88,14 +78,14 @@ public class AirTrafficControl {
         }
     }
 
-    public void print_flight_info(PrintWriter out, String[] command) {
+    public static void print_flight_info(PrintWriter out, String[] command) {
         String runwayId = aiplaneRunways.get(command[2]);
         Runway<? extends Airplane> runway = runways.get(runwayId);
 
         out.println(command[0] + " | " + runway.getAirplanesData().get(command[2]).toString());
     }
 
-    public void print_runway_info(String[] args, String[] command) throws IOException {
+    public static void print_runway_info(String[] args, String[] command) throws IOException {
         Runway<? extends Airplane> runway = runways.get(command[2]);
 
         LocalTime timestamp = LocalTime.parse(command[0]);
@@ -106,7 +96,7 @@ public class AirTrafficControl {
         writer.close();
     }
 
-    public void check_permission_and_execute_maneuver(String[] command) throws UnavailableRunwayException {
+    public static void check_permission_and_execute_maneuver(String[] command) throws UnavailableRunwayException {
         Runway<? extends Airplane> runway = runways.get(command[2]);
         LocalTime timestamp = LocalTime.parse(command[0]);
 
@@ -129,7 +119,7 @@ public class AirTrafficControl {
         runway.setStatus(RunwayStatus.OCCUPIED);
     }
 
-    public void updateRunwaysStatus(LocalTime timestamp) {
+    public static void updateRunwaysStatus(LocalTime timestamp) {
         for (Runway<?> runway : runways.values()) {
             if (runway.getStatus().equals(RunwayStatus.OCCUPIED) && runway.getOccupiedUntil().isBefore(timestamp)) {
                 runway.setStatus(RunwayStatus.FREE);
