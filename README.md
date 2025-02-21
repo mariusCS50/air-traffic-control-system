@@ -1,70 +1,68 @@
-## Proiect: Sistem de Control al Traficului Aerian
+# Air Traffic Control System
 
-### Descriere Generală
-Acest proiect implementează un sistem de control al traficului aerian pentru un aeroport, utilizând programarea orientată pe obiecte. Sistemul gestionează pistele de aterizare/decolare și avioanele alocate acestora, cu funcționalități precum adăugarea pistelor, alocarea avioanelor și gestionarea priorităților.
+This repository implements a flight operations simulation system as part of a university assignment. The application reads commands from input files, processes runway and flight operations, and writes output files. It also handles exceptional scenarios, such as allocation failures and permission issues during maneuvers.
 
-### Structura Proiectului
+## Project Structure
 
-1. **Clasa `AirTrafficControl`:**
-   - Gestionează întregul sistem de control al traficului aerian.
-   - Atribute principale:
-      - `runways`: O hartă care asociază ID-ul pistei cu obiectul `Runway`.
-      - `aiplaneRunways`: O hartă care leagă ID-ul unui avion de pista asociată.
-   - Funcționalități:
-      - Interpretarea comenzilor din fișiere.
-      - Gestionarea pistelor și avioanelor.
-      - Tratarea excepțiilor.
+- **Gradle Build**
+  The project is built using Gradle. The wrapper scripts ([gradlew](gradlew) and [gradlew.bat](gradlew.bat)) are provided to ensure a consistent build environment.
 
-2. **Clasa `Airplane`:**
-   - Modelează un avion, incluzând informații precum model, ID-ul zborului, locația de plecare, destinația, timpul dorit și starea actuală.
-   - Atribute suplimentare:
-      - `urgency`: Indicator pentru prioritatea în caz de urgență.
-   - Metode:
-      - `toString()`: Returnează informații detaliate despre avion.
+- **Main Application**
+  The main logic is implemented in [`org.example.Main`](src/main/java/org/example/Main.java). It reads the input file from `src/main/resources/<test-case>/input.in` and writes output files such as `flight_info.out` and `board_exceptions.out`.
 
-3. **Clasa `Runway`:**
-   - Modelează o pistă de aterizare sau decolare, utilizând genericitate pentru a permite doar avioane de tip `WideBodyAirplane` sau `NarrowBodyAirplane`.
-   - Atribute principale:
-      - `airplanesData`: O hartă folosită pentru a stoca detaliile fiecărui avion. Am ales să folosesc `HashMap` pentru că permite acces rapid (`O(1)`) la informațiile unui avion pe baza ID-ului său.
-      - `airplanesPriority`: O listă prioritară care menține avioanele în ordinea priorității. Am optat pentru o listă sortată (`ArrayList`) deoarece necesită sortare personalizată în funcție de comparator și oferă flexibilitate în gestionarea priorităților.
-   - Funcționalități:
-      - Adăugarea avioanelor în ordine de prioritate.
-      - Gestionarea stării pistei (liberă/ocupată).
-      - Extragerea avionului cu cea mai mare prioritate.
+- **Resource Files**
+  Each test case (e.g., `01-basic-flight-search`, `02-exceptions-flight-search`, etc.) has a dedicated folder under `src/main/resources/`. These folders contain the input files as well as reference output files (with `.ref` extensions) used for testing.
 
-4. **Enumerări:**
-   - `AirplaneStatus`: Stările posibile ale unui avion (e.g., `WAITING_FOR_TAKEOFF`, `LANDED`).
-   - `RunwayStatus`: Stările posibile ale unei piste (`FREE`, `OCCUPIED`).
-   - `RunwayType`: Tipurile de piste (`LANDING`, `TAKEOFF`).
+- **JUnit Tests**
+  The test suite in [`TestMain`](src/test/java/TestMain.java) invokes the main application with various test-case names. It compares the generated output files with the reference files, ensuring that operations like runway allocation, flight search, and maneuver permission are handled correctly.
 
-### Funcționalități Implementate
+- **Autograding Configuration**
+  The workflow defined in [`.github/workflows/classroom.yml`](.github/workflows/classroom.yml) automates testing using Gradle tasks. Specific tests (e.g., `basicFlightSearch01`, `exceptionsFlightSearch02`, etc.) are invoked as part of the continuous integration process.
 
-1. **Adăugarea unei piste:**
-   - Comanda `add_runway_in_use` permite adăugarea unei piste de aterizare/decolare, specificând tipul de avioane acceptate.
+## How It Works
 
-2. **Alocarea unui avion către o pistă:**
-   - Comanda `allocate_plane` verifică tipul pistei și alocă avionul în funcție de prioritate.
+1. **Input Processing**
+   The application expects a single command-line argument corresponding to the test-case folder name in `src/main/resources/`. For example, running
 
-3. **Permisiunea pentru manevră:**
-   - Comanda `permission_for_maneuver` actualizează starea avionului și marchează pista ca ocupată pentru un interval specific (5 minute pentru decolare, 10 minute pentru aterizare).
+```sh
+./gradlew run --args="01-basic-flight-search"
+```
 
-4. **Informații despre piste și avioane:**
-   - Comenzile `runway_info` și `flight_info` generează fișiere de ieșire cu detalii despre starea pistelor și avioanelor.
+   will execute the commands in the input file `src/main/resources/01-basic-flight-search/input.in`.
 
-5. **Tratarea excepțiilor:**
-   - `IncorrectRunwayException`: Aruncată dacă avionul este alocat unei piste incorecte.
-   - `UnavailableRunwayException`: Aruncată dacă pista este ocupată în momentul unei manevre.
+2. **Command Handling**
+   In [`Main.main`](src/main/java/org/example/Main.java), input is processed line by line. Each line of input is split using `" - "` into a timestamp and a command. The supported commands include:
+   - `"add_runway_in_use"` – Adds a runway for operations.
+   - `"allocate_plane"` – Allocates a plane to a runway.
+   - `"permission_for_maneuver"` – Checks permissions and executes complex maneuvers.
 
-### Motivația Alegerii Colecțiilor
+   The appropriate method is called for each command, such as [`Main.add_runway`](src/main/java/org/example/Main.java) or [`Main.allocate_plane_on_runway`](src/main/java/org/example/Main.java).
 
-1. **`runways`:**
-   - Am ales să folosesc o colecție de tip `HashMap` pentru a asocia ID-ul fiecărei piste cu obiectul `Runway`. Această alegere asigură acces rapid la informațiile despre piste, cu o complexitate de `O(1)` pentru operațiile de căutare și inserare.
+3. **Output Generation**
+   Depending on the commands processed, the application writes output files (e.g., `flight_info.out` and `board_exceptions.out`) in the corresponding resource folder. These outputs are later validated against reference files in the automated tests.
 
-2. **`aiplaneRunways`:**
-   - La fel ca în cazul pistelor, am utilizat o hartă de tip `HashMap` pentru a lega ID-ul fiecărui avion de pista corespunzătoare. Astfel, accesul la pista asociată unui avion este eficient și rapid.
+4. **Testing and Verification**
+   The tests in [`TestMain`](src/test/java/TestMain.java) run the main application for each scenario. They use helper functions like `areFilesEqual` to compare generated output files with expected reference files, ensuring that the program behaves correctly under both normal and exceptional conditions.
 
-3. **`airplanesPriority`:**
-   - Pentru menținerea priorității avioanelor, am optat pentru o listă sortată (`ArrayList`). Această alegere permite sortarea flexibilă pe baza unui comparator specific, ceea ce este esențial pentru gestionarea priorităților la aterizare și decolare.
+## Running the Project
 
-4. **`airplanesData`:**
-   - Am folosit o hartă de tip `HashMap` pentru stocarea detaliilor fiecărui avion, deoarece permite căutarea rapidă a informațiilor în funcție de ID-ul avionului.
+- **Build the Project**
+  Execute the following command in a terminal:
+
+```sh
+./gradlew build
+```
+
+- **Run a Specific Test Case**
+  For example, to run the test case for basic flight search:
+
+```sh
+./gradlew run --args="01-basic-flight-search"
+```
+
+- **Run Automated Tests**
+  To execute all the tests:
+
+```sh
+./gradlew test
+```
